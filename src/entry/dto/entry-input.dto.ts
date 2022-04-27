@@ -1,13 +1,8 @@
 import { Exclude, Expose } from '@nestjs/class-transformer';
-import { IsBoolean, IsNumber, IsOptional, IsString, Max, Min, MinLength } from '@nestjs/class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString, IsUUID, Max, Min, MinLength } from '@nestjs/class-validator';
 
 @Exclude()
-export class Entry {
-  @Exclude()
-  @IsString()
-  @MinLength(1)
-  id: string;
-
+export class EntryInput {
   @Expose()
   @IsString()
   @MinLength(1)
@@ -20,12 +15,12 @@ export class Entry {
   type: number;
 
   @Expose()
-  @IsString()
+  @IsUUID('4')
   @MinLength(1)
   category: string;
 
   @Expose()
-  @IsString()
+  @IsUUID('4')
   @MinLength(1)
   wallet: string;
 
@@ -44,7 +39,7 @@ export class Entry {
   @IsString()
   @MinLength(1)
   @IsOptional()
-  receivedDate: string;
+  received_date: string;
 
   @Expose()
   @IsNumber()

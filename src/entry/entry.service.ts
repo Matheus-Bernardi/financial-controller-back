@@ -1,59 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { Entry } from './dto/entry.dto';
+import { EntryInput } from './dto/entry-input.dto';
+import { EntryResponse } from './dto/entry-response.dto';
+import { EntryRepository } from './entry.repository';
 
 @Injectable()
 export class EntryService {
 
-  private entries = [
-    {
-      id: '1',
-      description: 'Teste',
-      type: 1,
-      category: '1',
-      wallet: '1',
-      value: 1,
-      received: true,
-      receivedDate: '26/04/2022',
-      repeat: 1,
-      note: 'Teste',
-      prevision: true,
-    },
-    {
-      id: '2',
-      description: 'Teste 2',
-      type: 0,
-      category: '1',
-      wallet: '1',
-      value: 1,
-      received: true,
-      receivedDate: '26/04/2022',
-      repeat: 1,
-      note: 'Teste',
-      prevision: true,
-    },
-  ];
+  constructor(
+    private entryRepository: EntryRepository,
+  ) {}
 
-  getEntry(id: string): Entry {
-    return this.entries.find(entry => entry.id === id);
+  async getEntry(id: string): Promise<EntryResponse> {
+    return await this.entryRepository.selectEntryFromId(id);
   }
 
-  getAllEntries(): Array<Entry> {
-    return this.entries;
+  async getAllEntries(): Promise<EntryResponse[]> {
+    return await this.entryRepository.selectAllEntries();
   }
 
-  postEntry(entry: Entry): Entry {
-    entry.id = String(this.entries.length + 1);
-    this.entries.push(entry);
-    return entry;
+  async postEntry(entry: EntryInput) {
+    await this.entryRepository.insertEntry(entry);
   }
 
-  putEntry(entry: Entry): Entry {
-    const index = this.entries.findIndex(entryElement => entry.id === entryElement.id);
-    this.entries[index] = entry;
-    return entry;
+  async putEntry(id: string, entry: EntryInput) {
+    await this.entryRepository.updateEntry(id, entry);
   }
 
-  deleteEntry(id: string) {
-    this.entries = this.entries.filter(entry => entry.id !== id);
+  async deleteEntry(id: string) {
+    await this.entryRepository.deleteEntry(id);
   }
 }

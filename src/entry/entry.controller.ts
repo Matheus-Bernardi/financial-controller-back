@@ -1,5 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { Entry } from './dto/entry.dto';
+import { IdInput } from 'src/common/dto/id-input.dto';
+import { EntryInput } from './dto/entry-input.dto';
+import { EntryResponse } from './dto/entry-response.dto';
 import { EntryService } from './entry.service';
 
 @Controller('/entries')
@@ -7,31 +9,42 @@ export class EntryController {
   constructor(private readonly entryService: EntryService) {}
 
   @Get(':id')
-  getEntry(
-    @Param('id') id: string,
-  ): Entry {
-    return this.entryService.getEntry(id); 
+  async getEntry(
+    @Param() { id }: IdInput,
+  ): Promise<EntryResponse> {
+    return await this.entryService.getEntry(id); 
   }
 
   @Get()
-  getAllEntries(): Array<Entry> {
-    return this.entryService.getAllEntries();
+  async getFilteredEntry(
+    @Query() { date },
+  ) {
+    console.log(date);
+    return date;
+  }
+
+  @Get()
+  async getAllEntries(): Promise<EntryResponse[]> {
+    return await this.entryService.getAllEntries();
   }
 
   @Post()
-  postEntry(@Body() entry: Entry): Entry {
-    return this.entryService.postEntry(entry);
+  async postEntry(@Body() entry: EntryInput) {
+    return await this.entryService.postEntry(entry);
   }
 
-  @Put()
-  putEntry(@Body() entry: Entry): Entry {
-    return this.entryService.putEntry(entry);
+  @Put(':id')
+  async putEntry(
+    @Param() { id }: IdInput,
+    @Body() entry: EntryInput
+  ) {
+    return await this.entryService.putEntry(id, entry);
   }
 
   @Delete(':id')
-  deleteEntry(
-    @Param('id') id: string
+  async deleteEntry(
+    @Param() { id }: IdInput,
   ) {
-    return this.entryService.deleteEntry(id);
+    return await this.entryService.deleteEntry(id);
   }
 }
