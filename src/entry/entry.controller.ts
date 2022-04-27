@@ -1,5 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { IdInput } from 'src/common/dto/id-input.dto';
+import { DatesInput } from '../common/dto/dates-input.dto';
+import { IdInput } from '../common/dto/id-input.dto';
+import { MonthYearInput } from '../common/dto/monthYear-input.dto';
 import { EntryInput } from './dto/entry-input.dto';
 import { EntryResponse } from './dto/entry-response.dto';
 import { EntryService } from './entry.service';
@@ -8,24 +10,30 @@ import { EntryService } from './entry.service';
 export class EntryController {
   constructor(private readonly entryService: EntryService) {}
 
-  @Get(':id')
-  async getEntry(
-    @Param() { id }: IdInput,
-  ): Promise<EntryResponse> {
-    return await this.entryService.getEntry(id); 
+  @Get('/search')
+  async getFilteredEntry(
+    @Query() { startDate, finalDate }: DatesInput,
+  ) {
+    return await this.entryService.getFilteredEntry(startDate, finalDate);
   }
 
-  @Get()
-  async getFilteredEntry(
-    @Query() { date },
-  ) {
-    console.log(date);
-    return date;
+  @Get('/total-month')
+  async getTotalMonth(
+    @Query() { month, year }: MonthYearInput,
+  ): Promise<{ total: number}> {
+    return await this.entryService.getTotalMonth(month, year);
   }
 
   @Get()
   async getAllEntries(): Promise<EntryResponse[]> {
     return await this.entryService.getAllEntries();
+  }
+
+  @Get(':id')
+  async getEntry(
+    @Param() { id }: IdInput,
+  ): Promise<EntryResponse> {
+    return await this.entryService.getEntry(id); 
   }
 
   @Post()

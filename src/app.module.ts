@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { KnexModule } from 'nestjs-knex';
 import { EntryModule } from './entry/entry.module';
+import { CommonModule } from './common/common.module';
 import env from './app.env';
 
 @Module({
@@ -17,7 +18,8 @@ import env from './app.env';
         },
       },
     }),
-    EntryModule
+    EntryModule,
+    CommonModule,
   ],
   controllers: [],
   providers: [],

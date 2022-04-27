@@ -13,11 +13,30 @@ export class EntryRepository {
   ) {}
   
   async selectEntryFromId(id: string): Promise<EntryEntity> {
-    return await this.knex.select().from<EntryEntity>(this.tableName).where('entry_id', id).first();
+    return await this.knex
+      .select()
+      .from<EntryEntity>(this.tableName)
+      .where('entry_id', id)
+      .first();
   }
 
   async selectAllEntries(): Promise<EntryEntity[]> {
-    return await this.knex.select().from<EntryEntity>(this.tableName);
+    return await this.knex
+      .select()
+      .from<EntryEntity>(this.tableName);
+  }
+
+  async selectEntriesFromDate(startDate: string, finalDate: string): Promise<EntryEntity[]> {
+    return await this.knex
+      .select()
+      .from<EntryEntity>(this.tableName)
+      .whereBetween('received_date', [startDate, finalDate]);
+  }
+
+  async selectTotalBetweenDates(startDate: string, finalDate: string): Promise<object> {
+    const result = await this.selectEntriesFromDate(startDate, finalDate);
+    
+    return {total: result.reduce((acumulate, currentValue) => acumulate + Number(currentValue.value), 0)};
   }
 
   async insertEntry(entry: InsertEntryEntity) {
@@ -25,10 +44,16 @@ export class EntryRepository {
   }
 
   async updateEntry(id: string, entry: InsertEntryEntity) {
-    await this.knex.update(entry).into(this.tableName).where('entry_id', id);
+    await this.knex
+      .update(entry)
+      .into(this.tableName)
+      .where('entry_id', id);
   }
 
   async deleteEntry(id: string) {
-    await this.knex.delete().from(this.tableName).where('entry_id', id);
+    await this.knex
+      .delete()
+      .from(this.tableName)
+      .where('entry_id', id);
   }
 }
