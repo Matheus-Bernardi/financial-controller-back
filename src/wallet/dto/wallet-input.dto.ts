@@ -16,4 +16,9 @@ export class WalletInput {
   @IsUUID('4')
   @MinLength(1)
   user_id: string;
+
+  @Expose()
+  @IsString()
+  @MinLength(1)
+  month_year: string;
 }
