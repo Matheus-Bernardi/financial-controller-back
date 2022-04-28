@@ -12,21 +12,21 @@ export class EntryService {
     private commonService: CommonService,
   ) {}
 
-  async getEntry(id: string): Promise<EntryResponse> {
-    return await this.entryRepository.selectEntryFromId(id);
+  async getEntry(id: string, userId: string): Promise<EntryResponse> {
+    return await this.entryRepository.selectEntryFromId(id, userId);
   }
 
-  async getAllEntries(): Promise<EntryResponse[]> {
-    return await this.entryRepository.selectAllEntries();
+  async getAllEntries(userId: string): Promise<EntryResponse[]> {
+    return await this.entryRepository.selectAllEntries(userId);
   }
 
-  async getFilteredEntry(startDate: string, finalDate: string): Promise<EntryResponse[]> {
-    return await this.entryRepository.selectEntriesFromDate(startDate, finalDate);
+  async getFilteredEntry(userId: string, startDate: string, finalDate: string): Promise<EntryResponse[]> {
+    return await this.entryRepository.selectEntriesFromDate(userId, startDate, finalDate);
   }
 
-  async getTotalMonth(month: string, year: string): Promise<{ total: number }> {
+  async getTotalMonth(userId: string, month: string, year: string): Promise<{ total: number }> {
     const { startDate, finalDate } = this.commonService.startFinalDateByMonthYear(month, year);
-    const result = await this.entryRepository.selectEntriesFromDate(startDate, finalDate);
+    const result = await this.entryRepository.selectEntriesFromDate(userId, startDate, finalDate);
 
     return {total: this.sumTotalFromEntries(result)};
   }

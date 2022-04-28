@@ -17,12 +17,12 @@ export class EntryInput {
   @Expose()
   @IsUUID('4')
   @MinLength(1)
-  category: string;
+  category_id: string;
 
   @Expose()
   @IsUUID('4')
   @MinLength(1)
-  wallet: string;
+  wallet_id: string;
 
   @Expose()
   @IsNumber({
