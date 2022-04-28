@@ -5,6 +5,7 @@ import { CommonModule } from './common/common.module';
 import env from './app.env';
 import { CategoryModule } from './category/category.module';
 import { WalletModule } from './wallet/wallet.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { WalletModule } from './wallet/wallet.module';
     CommonModule,
     CategoryModule,
     WalletModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
